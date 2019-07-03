@@ -61,12 +61,16 @@ class ItemController extends Controller
             "jumlah" => "required|numeric|min:0"
         ]);        
 
-        $last_id = Item::all()->last() == null ? 's-0' : Item::all()->last()->id;
-        $c = explode('-', $last_id);
-        $last_id = (int)$c[1];
-        $n = $req->jumlah;
         $category_id = $this->enc->decrypt($req->category_id);
         $category = Category::find($category_id);
+
+        $items = Item::where('category_id', $category_id)->get();
+        $last_id = $items->count() == 0 ? 's-0' : $items->last()->id;
+        $c = explode('-', $last_id);
+        
+        $last_id = (int)$c[1];
+        $n = $req->jumlah;
+        
         for($i = 0; $i<$n; $i++){
             $id = $category->code."-".str_pad(++$last_id, 4, '0', STR_PAD_LEFT);
             Item::create([

@@ -28,3 +28,12 @@ Route::post('/item/update', 'ItemController@update_item_description');
 Route::post('/item/delete', 'ItemController@delete_item');
 
 Route::post('/item/move', 'MovementController@move');
+Route::get('/history/{id}', 'MovementController@history');
+
+Route::post('/missing/add', 'MissingItemController@add');
+Route::post('/missing/cancel', 'MissingItemController@cancel');
+Route::get('/missing_item', 'MissingItemController@report');
+
+Route::get('/submission', 'SubmissionController@index');
+Route::get('/submission/create', 'SubmissionController@create');
+Route::post('/submission/store', 'SubmissionController@store');

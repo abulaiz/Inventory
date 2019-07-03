@@ -13,12 +13,13 @@ class CreateTableItemSubmissions extends Migration
      */
     public function up()
     {
-        Schema::create('item_submissions', function (Blueprint $table) {
+        Schema::create('submissions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('item_name', 100);
             $table->boolean('new_category');
+            $table->string('category_name', 100)->nullable();
             $table->unsignedInteger('category_id')->nullable();
-            $table->char('status', 1);
+            $table->smallInteger('qty')->nullable();
+            $table->char('status', 1); // 1 : Menunggu, 2 : dikonfirmasi, 3 : ditolak
             $table->unsignedInteger('user_id');
             $table->timestamps();
 

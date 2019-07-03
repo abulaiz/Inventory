@@ -5,13 +5,13 @@
         </li>
         <li class="@yield('data_barang') nav-item"><a href="/category"><i class="icon-layers"></i><span class="menu-title" data-i18n="nav.dash.main">Data Barang</span></a>
         </li>
-        <li class=" nav-item"><a href="index.html"><i class="icon-logout"></i><span class="menu-title" data-i18n="nav.dash.main">Laporan Kehilangan</span></a>
+        <li class="@yield('laporan_kehilangan') nav-item"><a href="/missing_item"><i class="icon-logout"></i><span class="menu-title" data-i18n="nav.dash.main">Laporan Kehilangan</span></a>
         </li>                
         <li class=" nav-item"><a href="#"><i class="icon-book-open"></i><span class="menu-title" data-i18n="nav.category.support">Pengajuan Barang</span></a>
           <ul class="menu-content">
-            <li><a class="menu-item" href="http://support.pixinvent.com/" data-i18n="nav.support_raise_support.main">Pengajuan Baru</a>
+            <li class="@yield('pengajuan_baru')"><a class="menu-item" href="/submission/create" data-i18n="nav.support_raise_support.main">Pengajuan Baru</a>
             </li>
-            <li><a class="menu-item" href="https://pixinvent.com/robust-bootstrap-admin-template/documentation"
+            <li class="@yield('laporan_pengajuan')"><a class="menu-item" href="/submission"
               data-i18n="nav.support_documentation.main">Laporan Pengajuan</a>
             </li>
           </ul>

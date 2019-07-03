@@ -1,14 +1,9 @@
 @extends('layouts.master')
-@section('title_site','Data Barang')
-@section('data_barang','active')
-@section('title_page','Kategori Barang')
+@section('title_site','Laporan Kehilangan')
+@section('laporan_kehilangan','active')
+@section('title_page','Daftar Kehilangan Barang')
 
-@section('button_header')
-  <button class="btn btn-success" data-toggle="modal" data-target="#add" data-backdrop="static" data-keyboard="false">
-    <i class="fa fa-plus mr-1"></i>Tambah Kategori</button>
-@endsection
-
- @section('content')
+@section('content')
 <section id="listData">
   <div class="row">
     <div class="col-12">
@@ -19,30 +14,30 @@
               <table class="table table-bordered table-hover" id="datatables">
                 <thead>
                   <tr>
-                    <td>#</td>
+                    <td>Tanggal</td>
                     <td>Kategori Barang</td>
-                    <td>Inisial Kategori</td>
-                    <td>Total Tersedia</td>
-                    <td>Total Keilangan</td>
+                    <td>Id Barang</td>
+                    <td>Deskripsi Barang</td>
+                    <td>Posisi Terakhir</td>
+                    <td>Pelapor</td>
                     <td>Opsi</td>
                   </tr>
                 </thead>
                 <tbody>
-                  @php $i = 1; $ids = []; @endphp
                   @foreach($data as $item)
                   <tr>
-                    @php $ids[] = $item->id; @endphp
-                    <td>{{ $i++ }}</td>
-                    <td>{{ $item->name }}</td>
-                    <td>{{ $item->code }}</td>
-                    <td>{{ $item->item->where('position', '!=', '4')->count() }}</td>
-                    <td>{{ $item->item->where('position', '4')->count() }}</td>
+                    <td>{{ $item->movements->last()->created_at }}</td>
+                    <td>{{ $item->category->name }}</td>
+                    <td>{{ $item->id }}</td>
+                    <td>{{ $item->description }}</td>
+                    <td>{{ $_str->item_position($item->movements->last()->from_position, $item->movements->last()->from_unit) }}</td>
+                    <td>{{ $item->movements->last()->user->name }}</td>
                     <td>
                       <button type="button" class="btn btn-outline-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                       <div class="dropdown-menu" x-placement="bottom-start">
-                        <a class="dropdown-item more"><i class="fa fa-th mr-1"></i>Selengkapnya</a>
+                        <a class="dropdown-item cancel"><i class="fa fa-share-square-o mr-1"></i>Batalkan Laporan</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item delete"><i class="fa fa-times mr-1"></i>Hapus</a>
+                        <a class="dropdown-item delete"><i class="fa fa-trash mr-1"></i>Hapus Barang</a>
                       </div>
                     </td>
                   </tr>
@@ -57,13 +52,11 @@
   </div>
 </section>
 
-<div class="modal fade text-left" id="add" tabindex="-1" role="dialog"  aria-hidden="true">
-  @include('modals.add_categories')
-</div>
+<form style="display: none;" method="POST" id="delete_item_form" action="/item/delete">
+  @csrf
+</form>
 
-<p style="display: none;" id="ids">{{ json_encode($ids) }}</p>
-
-<form style="display: none;" method="POST" action="/category/delete" id="delete_category_form">
+<form style="display: none;" method="POST" id="cancel_report_form" action="/missing/cancel">
   @csrf
 </form>
 @endsection
@@ -73,5 +66,5 @@
 <script type="text/javascript" src="../../../assets/datatables/datatables.min.js"></script>
 <script type="text/javascript" src="../../../js/additional/SimpleEnc.js"></script>
 
-<script type="text/javascript" src="../../../js/view/data_barang/index_category.js"></script>
+<script type="text/javascript" src="../../../js/view/laporan_kehilangan/index.js"></script>
 @endsection

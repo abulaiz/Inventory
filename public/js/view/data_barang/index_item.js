@@ -51,3 +51,15 @@ $(".update").click(function(){
 	current_id = $(this.parentNode.parentNode.parentNode.children[0]).text();
 	$("#update_position_title").text( current_id );	
 });
+
+$(".history").click(function(){
+	window.location = '/history/' + SimpleEnc.encrypt( $(this.parentNode.parentNode.parentNode.children[0]).text() );
+});
+
+$(".missing").click(function(){
+	var id = SimpleEnc.encrypt( $(this.parentNode.parentNode.parentNode.children[0]).text() );
+	_confirm(1, function(){
+		$("#missing_item_form").append("<input type='hidden' name='item_id' value='"+ id +"'>");
+		document.getElementById('missing_item_form').submit();
+	}, "Barang akan dilaporkan hilang.");	
+});

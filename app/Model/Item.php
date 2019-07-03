@@ -11,4 +11,14 @@ class Item extends Model
 	protected $keyType = 'char';
 
 	protected $guarded = [''];
+
+    public function movements()
+    {
+        return $this->hasMany('App\Model\Movement');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo('App\Model\Category');
+    }       	
 }

@@ -19,7 +19,7 @@
 
 @media (min-width: 992px) {
 	body.vertical-compact-menu .main-menu, body.vertical-compact-menu .vertical-overlay-menu.menu-hide .main-menu, .vertical-overlay-menu.menu-hide body.vertical-compact-menu .main-menu {
-	width: 170px !important; 
+	width: 182px !important; 
 	} 
 }
 

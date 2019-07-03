@@ -36,11 +36,11 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach($data->item as $item)
+                  @foreach($data->item->where('position', '!=', '4') as $item)
                   <tr>
                     <td>{{ $item->id }}</td>
                     <td>{{ $item->description }}</td>
-                    <td>{{ $_str->item_position($item->position, $item->unit_id) }}</td>
+                    <td>Di {{ $_str->item_position($item->position, $item->unit_id) }}</td>
                     <td>{{ $item->updated_at }}</td>
                     <td>
                       <button type="button" class="btn btn-outline-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
@@ -50,12 +50,14 @@
 
                         <a data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#update" class="dropdown-item update"><i class="fa fa-bolt mr-1"></i>Update Posisi</a>
 
-                        <a class="dropdown-item"><i class="fa fa-clock-o mr-1"></i>Riwayat Perpindahan</a>
+                        <a class="dropdown-item history"><i class="fa fa-clock-o mr-1"></i>Riwayat Perpindahan</a>
 
                         <div class="dropdown-divider"></div>
                         
+                        <a class="dropdown-item missing"><i class="fa fa-wpforms mr-1"></i>Laporkan Hilang</a>
+
                         <a class="dropdown-item delete"><i class="fa fa-times mr-1"></i>Hapus Stok</a>
-                      
+
                       </div>
                     </td>
                   </tr>
@@ -73,6 +75,10 @@
 <p class="element-parser" style="display: none;" id="category_id">{{ $data->id }}</p>
 
 <form style="display: none;" method="POST" id="delete_item_form" action="/item/delete">
+  @csrf
+</form>
+
+<form style="display: none;" method="POST" id="missing_item_form" action="/missing/add">
   @csrf
 </form>
 
