@@ -1,15 +1,21 @@
 @extends('layouts.master')
-@section('title_site','Data Barang')
-@section('data_barang','active')
+@section('title_site','Laporan Kehilangan')
+@section('laporan_kehilangan','active')
 @section('title_page')
   Riwayat Perpindahan {{ $data->id }}
 @endsection
 
 @section('breadcumb_nav')
+@if($data->position == '4')
+    <li class="breadcrumb-item"><a href="/missing_item">Laporan Kehilangan</a>
+    </li>
+    <li class="breadcrumb-item active">Riwayat Perpindahan</li>
+@else
     <li class="breadcrumb-item"><a href="/category">Data Barang</a>
     </li>
-    <li class="breadcrumb-item"><a href="/item/{{$_enc->encrypt($data->category->id)}}">Daftar Stok ({{ $data->category->name }})</a></li>
+    <li class="breadcrumb-item"><a href="/item/{{$_enc->encrypt($data->category->id)}}">Daftar Stok ({{ $_mono->decrypt($data->category->name) }})</a></li>
     <li class="breadcrumb-item active">Riwayat Perpindahan</li>
+@endif
 @endsection
 
 
@@ -26,7 +32,7 @@
                   <tr>
                     <td>Tanggal</td>
                     <td>Posisi Asal</td>
-                    <td>Posisi Tujuan</td>
+                    <td>Posisi Akhir</td>
                     <td>Dilaporkan Oleh</td>
                   </tr>
                 </thead>
@@ -35,7 +41,9 @@
                   <tr>
                     <td>{{ $item->created_at }}</td>
                     <td>{{ $_str->item_position($item->from_position, $item->from_unit) }}</td>
-                    <td>{{ $_str->item_position($item->to_position, $item->to_unit) }}</td>
+                    <td 
+                    @if($item->to_position == '4') style="color:red;" @endif>
+                    {{ $_str->item_position($item->to_position, $item->to_unit) }}</td>
                     <td>{{ $item->user->name }}</td>
                   </tr>
                   @endforeach

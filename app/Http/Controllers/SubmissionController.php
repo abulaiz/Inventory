@@ -4,12 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\Category;
+use App\Model\Item;
 use App\Model\Submission;
+use App\Libs\SimpleEnc;
 
 use Auth;
 
 class SubmissionController extends Controller
 {
+   private $enc;
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->enc = new SimpleEnc();
+    }
+
     public function index(){
     	if(Auth::user()->hasRole('manager'))
     		$data = Submission::where('status', '1')->get();
@@ -49,5 +59,32 @@ class SubmissionController extends Controller
         ]);
 
         return redirect('/submission')->with(['_msg'=>"Pengajuan berhasil ditambahkan.",'_e'=>'success']);  
-    }    
+    } 
+
+    public function reject(Request $req){
+        $id = $this->enc->decrypt($req->submission_id);
+        Submission::find($id)->update(['status' => '3']);
+        return redirect()->back()->with(['_msg'=>"Pengajuan berhasil dibatakan.",'_e'=>'info']);  
+    }   
+
+    public function delete(Request $req){
+        $id = $this->enc->decrypt($req->submission_id);
+        Submission::find($id)->delete();
+        return redirect()->back()->with(['_msg'=>"Pengajuan telah dihapus.",'_e'=>'info']);          
+    }
+
+    public function confirm(Request $req){
+        $id = $this->enc->decrypt($req->submission_id);
+        $submission = Submission::find($id);
+        $submission->status = '2';
+        if($submission->new_category){
+            $req->merge(['nama_kategori' => $submission->category_name]);
+            app('App\Http\Controllers\ItemController')->add_category($req);
+        } else {    
+            $req->merge(['category_id' => $this->enc->encrypt($submission->category_id)]);
+            app('App\Http\Controllers\ItemController')->add_item($req);
+        }
+        $submission->save();
+        return redirect()->back()->with(['_msg'=>"Berhasil menambahkan barang.",'_e'=>'success']); 
+    }
 }

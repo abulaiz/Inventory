@@ -30,7 +30,7 @@
                 <select class="selectizes" name="kategori_barang">
                     <option value="" selected disabled>Pilih Kategori Barang</option>
                     @foreach($category as $item)
-                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                    <option value="{{ $item->id }}">{{ $_mono->decrypt($item->name) }}</option>
                     @endforeach
                 </select>                
               </div>   

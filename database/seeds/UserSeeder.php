@@ -18,21 +18,21 @@ class UserSeeder extends Seeder
     	Role::create(['name' => 'cleaner']);
 
         $user = new User();
-        $user->name = 'Alfian S';
+        $user->name = 'Alfian B';
         $user->email = 'user1@gmail.com';
         $user->password = bcrypt('user1');
         $user->save();
         $user->assignRole('manager');
 
         $user = new User();
-        $user->name = 'Alfian B';
+        $user->name = 'Budi K';
         $user->email = 'user2@gmail.com';
         $user->password = bcrypt('user2');
         $user->save();
         $user->assignRole('admin');
 
         $user = new User();
-        $user->name = 'Alfian C';
+        $user->name = 'Edward S';
         $user->email = 'user3@gmail.com';
         $user->password = bcrypt('user3');
         $user->save();

@@ -18,25 +18,39 @@
                     <td>Jenis Pengajuan</td>
                     <td>Kategori Barang</td>
                     <td>Jumlah</td>
+                    @if(!Auth::user()->hasRole('manager'))
+                    <td>Status</td>
+                    @endif
                     <td>Opsi</td>
                   </tr>
                 </thead>
                 <tbody>
+                  @php $ids = []; $i=1; @endphp
                   @foreach($data as $item)
+                  @php $ids[] = $item->id; @endphp
                   <tr>
                     <td>{{ $item->created_at }}</td>
                     <td>{{ $item->new_category ? 'Kategori Baru' : 'Penambahan Stok' }}</td>
-                    <td>{{ $item->new_category ? $item->category_name : $item->category->name }}</td>
+                    <td>{{ $item->new_category ? $item->category_name : $_mono->decrypt($item->category->name) }}</td>
                     <td>{{ $item->qty }}</td>
+                    @if(!Auth::user()->hasRole('manager'))
+                    <td>{{ $_str->status_submission($item->status) }}</td>
+                    @endif
                     <td>
                       <button type="button" class="btn btn-outline-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
-                      <div class="dropdown-menu" x-placement="bottom-start">
-                        <a class="dropdown-item cancel"><i class="fa fa-check mr-1"></i>Setujui Pengajuan</a>
-                        <div class="dropdown-divider"></div>
+                      <div class="dropdown-menu" data-id="{{$i++}}" x-placement="bottom-start">
+                        @hasrole('manager')
+                        <a class="dropdown-item confirm" data-toggle="modal" data-target="#confirm" data-backdrop="static" data-keyboard="false"><i class="fa fa-check mr-1"></i>Setujui Pengajuan</a>
+                        @endhasrole
+                        @if(!Auth::user()->hasRole('manager') && $item->status != '1')
+                        <a class="dropdown-item understood"><i class="fa fa-check mr-1"></i>Mengerti</a>
+                        @endif
                         @if(Auth::user()->hasRole('manager'))
-                        <a class="dropdown-item delete"><i class="fa fa-times mr-1"></i>Tolak Pengajuan</a>
-                        @elseif($item->status == '1wkwk')
-                        <a class="dropdown-item delete"><i class="fa fa-times mr-1"></i>Batalkan Pengajuan</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item reject"><i class="fa fa-times mr-1"></i>Tolak Pengajuan</a>
+                        @elseif($item->status == '1')
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item cancel"><i class="fa fa-times mr-1"></i>Batalkan Pengajuan</a>
                         @endif
                       </div>
                     </td>
@@ -52,13 +66,20 @@
   </div>
 </section>
 
-<form style="display: none;" method="POST" id="delete_item_form" action="/item/delete">
+<p style="display: none;" id="ids">{{ json_encode($ids) }}</p>
+
+<form style="display: none;" method="POST" id="reject_submission_form" action="/submission/reject">
   @csrf
 </form>
 
-<form style="display: none;" method="POST" id="cancel_report_form" action="/missing/cancel">
+<form style="display: none;" method="POST" id="delete_submission_form" action="/submission/delete">
   @csrf
 </form>
+
+<div class="modal fade text-left" id="confirm" tabindex="-1" role="dialog"  aria-hidden="true">
+  @include('modals.confirm_submission')
+</div>
+
 @endsection
 
 @section('customJS')
@@ -66,5 +87,5 @@
 <script type="text/javascript" src="../../../assets/datatables/datatables.min.js"></script>
 <script type="text/javascript" src="../../../js/additional/SimpleEnc.js"></script>
 
-<script type="text/javascript" src="../../../js/view/laporan_kehilangan/index.js"></script>
+<script type="text/javascript" src="../../../js/view/pengajuan_barang/index.js"></script>
 @endsection

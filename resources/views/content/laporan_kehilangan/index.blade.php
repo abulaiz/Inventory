@@ -27,14 +27,15 @@
                   @foreach($data as $item)
                   <tr>
                     <td>{{ $item->movements->last()->created_at }}</td>
-                    <td>{{ $item->category->name }}</td>
+                    <td>{{ $_mono->decrypt($item->category->name) }}</td>
                     <td>{{ $item->id }}</td>
-                    <td>{{ $item->description }}</td>
+                    <td>{{ $_mono->decrypt($item->description) }}</td>
                     <td>{{ $_str->item_position($item->movements->last()->from_position, $item->movements->last()->from_unit) }}</td>
                     <td>{{ $item->movements->last()->user->name }}</td>
                     <td>
                       <button type="button" class="btn btn-outline-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                       <div class="dropdown-menu" x-placement="bottom-start">
+                        <a class="dropdown-item history"><i class="fa fa-clock-o mr-1"></i>Riwayat Perpindahan</a>
                         <a class="dropdown-item cancel"><i class="fa fa-share-square-o mr-1"></i>Batalkan Laporan</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item delete"><i class="fa fa-trash mr-1"></i>Hapus Barang</a>

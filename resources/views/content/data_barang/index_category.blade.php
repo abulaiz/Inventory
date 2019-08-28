@@ -4,8 +4,10 @@
 @section('title_page','Kategori Barang')
 
 @section('button_header')
+@hasrole('manager')
   <button class="btn btn-success" data-toggle="modal" data-target="#add" data-backdrop="static" data-keyboard="false">
     <i class="fa fa-plus mr-1"></i>Tambah Kategori</button>
+@endhasrole
 @endsection
 
  @section('content')
@@ -33,7 +35,7 @@
                   <tr>
                     @php $ids[] = $item->id; @endphp
                     <td>{{ $i++ }}</td>
-                    <td>{{ $item->name }}</td>
+                    <td>{{ $_mono->decrypt($item->name) }}</td>
                     <td>{{ $item->code }}</td>
                     <td>{{ $item->item->where('position', '!=', '4')->count() }}</td>
                     <td>{{ $item->item->where('position', '4')->count() }}</td>
@@ -41,8 +43,10 @@
                       <button type="button" class="btn btn-outline-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                       <div class="dropdown-menu" x-placement="bottom-start">
                         <a class="dropdown-item more"><i class="fa fa-th mr-1"></i>Selengkapnya</a>
+                        @hasrole('manager')
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item delete"><i class="fa fa-times mr-1"></i>Hapus</a>
+                        @endhasrole
                       </div>
                     </td>
                   </tr>

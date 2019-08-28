@@ -17,3 +17,7 @@ $(".cancel").click(function(){
 		document.getElementById('cancel_report_form').submit();
 	}, "Laporan kehilangan dibatalkan.");
 });
+
+$(".history").click(function(){
+	window.location = '/history/' + SimpleEnc.encrypt( $(this.parentNode.parentNode.parentNode.children[2]).text() );
+});

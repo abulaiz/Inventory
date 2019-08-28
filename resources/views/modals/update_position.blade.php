@@ -21,7 +21,7 @@
                     <select class="selectizes">
                         <option value="" disabled selected>Pilih Unit</option>
                         @foreach($units as $item)
-                        <option value="{{ $item->id }}">{{ $item->unit_number }} - {{ $item->apartment_name }}</option>
+                        <option value="{{ $item->id }}">{{ $_mono->decrypt($item->unit_number) }} - {{ $_mono->decrypt($item->apartment_name) }}</option>
                         @endforeach
                     </select>
                 </div>                

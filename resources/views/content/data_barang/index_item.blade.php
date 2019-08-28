@@ -2,12 +2,14 @@
 @section('title_site','Data Barang')
 @section('data_barang','active')
 @section('title_page')
-  {{ $data->name }}
+  {{ $_mono->decrypt($data->name) }}
 @endsection
 
 @section('button_header')
+@unlessrole('cleaner')
   <button class="btn btn-success" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#add">
     <i class="fa fa-plus mr-1"></i>Tambah Item</button>
+@endunlessrole
 @endsection
 
 @section('breadcumb_nav')
@@ -39,25 +41,25 @@
                   @foreach($data->item->where('position', '!=', '4') as $item)
                   <tr>
                     <td>{{ $item->id }}</td>
-                    <td>{{ $item->description }}</td>
+                    <td>{{ $_mono->decrypt($item->description) }}</td>
                     <td>Di {{ $_str->item_position($item->position, $item->unit_id) }}</td>
                     <td>{{ $item->updated_at }}</td>
                     <td>
                       <button type="button" class="btn btn-outline-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
                       <div class="dropdown-menu" x-placement="bottom-start">
-                      
+                        @unlessrole('cleaner')
                         <a data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#edit" class="dropdown-item edit"><i class="fa fa-pencil-square-o mr-1"></i>Ubah Deskripis</a>
-
+                        @endunlessrole
                         <a data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#update" class="dropdown-item update"><i class="fa fa-bolt mr-1"></i>Update Posisi</a>
-
+                        
                         <a class="dropdown-item history"><i class="fa fa-clock-o mr-1"></i>Riwayat Perpindahan</a>
 
                         <div class="dropdown-divider"></div>
                         
                         <a class="dropdown-item missing"><i class="fa fa-wpforms mr-1"></i>Laporkan Hilang</a>
-
+                        @unlessrole('cleaner')
                         <a class="dropdown-item delete"><i class="fa fa-times mr-1"></i>Hapus Stok</a>
-
+                        @endunlessrole
                       </div>
                     </td>
                   </tr>

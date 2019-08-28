@@ -7,16 +7,18 @@ use App\Model\Category;
 use App\Model\Item;
 use App\Libs\SimpleEnc;
 use App\Model\Unit;
+use App\Libs\MonoAlpha;
 
 class ItemController extends Controller
 {
 
-    private $enc;
+    private $enc, $mono;
 
     public function __construct()
     {
         $this->middleware('auth');
         $this->enc = new SimpleEnc();
+        $this->mono = new MonoAlpha();
     }
 
     public function add_category(Request $req){
@@ -26,7 +28,8 @@ class ItemController extends Controller
         ]);
         
         Category::create([
-            'name' => $req->nama_kategori, 'code' => $req->inisial
+            'name' => $this->mono->encrypt($req->nama_kategori), 
+            'code' => $req->inisial
         ]);
 
         return redirect()->back()->with(['_msg'=>"Berhasil menambahkan kategori.",'_e'=>'success']);
@@ -50,7 +53,7 @@ class ItemController extends Controller
 
         $id = $this->enc->decrypt($req->id);
         $data = Item::find($id)->update([
-            'description' => $req->deskripsi
+            'description' => $this->mono->encrypt($req->deskripsi)
         ]);
 
         return redirect()->back()->with(['_msg'=>"Deskripsi berhasil diupdate.",'_e'=>'update']);
@@ -74,7 +77,9 @@ class ItemController extends Controller
         for($i = 0; $i<$n; $i++){
             $id = $category->code."-".str_pad(++$last_id, 4, '0', STR_PAD_LEFT);
             Item::create([
-                'id' => $id, 'description' => '-', 'position' => '1', 'category_id' => $category_id
+                'id' => $id, 
+                'description' => $this->mono->encrypt('-'), 
+                'position' => '1', 'category_id' => $category_id
             ]);
         }
 

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Model\Unit;
+use App\Libs\MonoAlpha;
 
 class UnitSeeder extends Seeder
 {
@@ -12,6 +13,8 @@ class UnitSeeder extends Seeder
      */
     public function run()
     {
+        $ma = new MonoAlpha;
+
 	    $apartment = [
 	    	["name" => "Newton Hybird Residence" , "address" => "Buah Batu"],
 	    	["name" => "The Jardin" , "address" => "Cihampelas"],
@@ -37,9 +40,9 @@ class UnitSeeder extends Seeder
 
         foreach ($units as $item) {
         	Unit::create([
-        		'unit_number' => $item['number'],
-        		'apartment_name' => $apartment[ $item['apt_id'] - 1 ]['name'],
-        		'apartment_address' => $apartment[ $item['apt_id'] - 1 ]['address'],
+        		'unit_number' => $ma->encrypt($item['number']),
+        		'apartment_name' => $ma->encrypt($apartment[ $item['apt_id'] - 1 ]['name']),
+        		'apartment_address' => $ma->encrypt($apartment[ $item['apt_id'] - 1 ]['address']),
         	]);
         }
     }
